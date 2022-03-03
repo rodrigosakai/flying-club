@@ -1,0 +1,50 @@
+{
+    "title": "instructor",
+    "type": "object",
+    "required": [
+        "name",
+        "email",
+        "address",
+        "date_of_birth",
+        "role",
+        "licence_number",
+        "diploma_issue_date",
+        "institution_name"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "email": {
+            "type": "string",
+            "format": "email"
+        },
+        "address": {
+            "type": "string"
+        },
+        "date_of_birth": {
+            "type": "string",
+            "format": "date"
+        },
+        "role": {
+            "type": "string",
+            "enum": [
+                "instructor"
+            ]
+        },
+        "licence_number": {
+            "type": "string"
+        },
+        "diploma_issue_date": {
+            "type": "string",
+            "format": "date"
+        },
+        "institution_name": {
+            "type": "string"
+        },
+        "password": {
+            "type": "string"
+        }
+    }
+}

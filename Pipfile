@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+python-dotenv = "*"
+sqlalchemy = "*"
+pysqlite3 = "*"
+pymongo = {extras = ["srv"], version = "*"}
+mongomock = "*"
+pytz = "*"
+jsonschema = "*"
+pyjwt = "*"
+bcrypt = "*"
+
+[dev-packages]
+autopep8 = "*"
+pylint = "*"
+pytest = "*"
+
+[requires]
+python_version = "3.8"

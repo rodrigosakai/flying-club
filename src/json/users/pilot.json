@@ -1,0 +1,38 @@
+{
+    "title": "pilot",
+    "type": "object",
+    "required": [
+        "email",
+        "name",
+        "address",
+        "date_of_birth",
+        "role",
+        "licence_number"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "email": {
+            "type": "string",
+            "format": "email"
+        },
+        "address": {
+            "type": "string"
+        },
+        "date_of_birth": {
+            "type": "string",
+            "format": "date"
+        },
+        "role": {
+            "type": "string",
+            "enum": [
+                "pilot"
+            ]
+        },
+        "licence_number": {
+            "type": "string"
+        }
+    }
+}
