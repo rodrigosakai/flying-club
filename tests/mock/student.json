@@ -1,0 +1,7 @@
+{
+    "name": "Mock Student",
+    "email": "student@mock.com",
+    "address": "Mock Street 983",
+    "date_of_birth": "1995-11-09",
+    "role": "student"
+}

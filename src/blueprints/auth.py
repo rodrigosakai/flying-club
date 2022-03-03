@@ -4,7 +4,7 @@ Auth blueprint
 import logging
 import json
 from flask import Blueprint, request, abort
-from src import http, database, auth
+from src import http, auth, database
 from src.http import HTTP_NOT_FOUND, HTTP_UNAUTHORIZED, MediaType
 
 logger = logging.getLogger()

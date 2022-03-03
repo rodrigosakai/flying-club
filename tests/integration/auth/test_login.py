@@ -4,7 +4,7 @@ Integration tests for login route
 import json
 from src.http import HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_OK, HTTP_UNAUTHORIZED
 from src import database
-from tests.conftest import APPLICATION_JSON, MOCK_EMAIL, MOCK_PASSWORD
+from tests.conftest import APPLICATION_JSON, MOCK_EMAIL, MOCK_HASHED_PASSWORD, MOCK_PASSWORD
 
 
 def test_bad_request(client):
@@ -60,7 +60,9 @@ def test_succes(client, mock_user):
     """
     Tests whether route returns HTTP_OK if user provides correct credentials
     """
-    database.insert_document(mock_user, "users")
+    database.insert_document(
+        mock_user,
+        "users")
 
     response = client.post(
         "/login",

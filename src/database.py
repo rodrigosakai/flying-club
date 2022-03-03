@@ -63,7 +63,7 @@ def insert_document(document: dict, collection: str):
     document["created_at"] = date.get_current_timestamp()
     result = db.get_collection(collection).insert_one(document)
 
-    document_id = result.inserted_id
+    document_id = str(result.inserted_id)
     created_at = document["created_at"]
 
     del document["created_at"]
@@ -71,7 +71,8 @@ def insert_document(document: dict, collection: str):
     return document_id, created_at
 
 
-def update_document(document_id: str, collection: str, update_fields: dict) -> str:
+def update_document(document_id: str, collection: str,
+                    update_fields: dict, operator: str = "$set") -> str:
     """
     Update document in database
 
@@ -94,7 +95,7 @@ def update_document(document_id: str, collection: str, update_fields: dict) -> s
 
     db.get_collection(collection).update_one(
         {"_id": ObjectId(document_id)},
-        {"$set": update_fields_minus_id}
+        {operator: update_fields_minus_id}
     )
 
     return update_fields_minus_id["updated_at"]

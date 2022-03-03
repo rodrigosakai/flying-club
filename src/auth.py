@@ -8,7 +8,7 @@ from enum import Enum
 from types import FunctionType
 import bcrypt
 import jwt
-from jwt.exceptions import InvalidSignatureError, ExpiredSignatureError
+from jwt.exceptions import InvalidSignatureError, ExpiredSignatureError, DecodeError
 from flask import request, abort
 from src import date
 from src.http import HTTP_UNAUTHORIZED
@@ -39,10 +39,12 @@ class JWTAuthenticator:
         request_authorization = request.headers.get("Authorization")
         if request_authorization is None:
             self.token = ""
+            return
 
         request_authorization_list = request_authorization.split()
         if len(request_authorization_list) != 2:
             self.token = ""
+            return
 
         self.token = request_authorization_list[1]
 
@@ -65,7 +67,7 @@ class JWTAuthenticator:
             self.__decode_token_from_headers()
 
             return True
-        except (ExpiredSignatureError, InvalidSignatureError):
+        except (ExpiredSignatureError, InvalidSignatureError, DecodeError):
             return False
 
     def get_user_role(self) -> str:
@@ -94,7 +96,7 @@ def generate_jwt_token(user: dict) -> str:
     str: JWT token
     """
     payload = {
-        key: user[key] for key in user if key not in ("_id", "password")
+        key: user[key] for key in user if key in ("role", "email")
     }
 
     payload["exp"] = date.get_24_hours_from_now()

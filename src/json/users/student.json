@@ -28,9 +28,6 @@
             "enum": [
                 "student"
             ]
-        },
-        "password": {
-            "type": "string"
         }
     }
 }

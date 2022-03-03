@@ -1,0 +1,8 @@
+{
+    "name": "Mock Pilot",
+    "email": "pilot@mock.com",
+    "address": "Mock Street 983",
+    "date_of_birth": "1995-11-09",
+    "role": "pilot",
+    "licence_number": "123321123"
+}

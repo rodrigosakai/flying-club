@@ -1,0 +1,10 @@
+{
+    "get": [
+        {
+            "endpoint": "/users",
+            "unauthorized_roles": [
+                null
+            ]
+        }
+    ]
+}

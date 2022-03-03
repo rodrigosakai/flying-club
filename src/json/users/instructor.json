@@ -42,9 +42,6 @@
         },
         "institution_name": {
             "type": "string"
-        },
-        "password": {
-            "type": "string"
         }
     }
 }
