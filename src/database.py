@@ -1,11 +1,14 @@
 """
 Database module
 """
+from functools import wraps
 import os
+from flask import abort
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from mongomock import MongoClient as MockMongoClient
 from src import date
+from src.http import HTTP_NOT_FOUND
 
 ENV = os.getenv("ENV")
 DATABASE = os.getenv("DATABASE", "flying-club")
@@ -99,3 +102,47 @@ def update_document(document_id: str, collection: str,
     )
 
     return update_fields_minus_id["updated_at"]
+
+
+def delete_document(document_id: str, collection: str) -> int:
+    """
+    Deletes document from collection based on ID
+
+    Params:
+    -------
+    document_id: str
+        ID of document
+    collection: str
+        Collection name in database
+
+    Returns:
+    -------
+    deleted_count: int
+        Number of documents deleted
+    """
+    result = db.get_collection(collection).delete_one(
+        {"_id": ObjectId(document_id)})
+
+    return result.deleted_count
+
+
+def validate_student_id():
+    """
+    Checks whether given ID belongs to a student
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(user_id, *args, **kwargs):
+            print(user_id)
+            users = get_documents(
+                "users",
+                {"$and": [
+                    {"_id": ObjectId(user_id)},
+                    {"role": "student"}]})
+
+            if users == []:
+                abort(HTTP_NOT_FOUND)
+
+            return func(user_id, *args, **kwargs)
+        return wrapper
+    return decorator

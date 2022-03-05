@@ -6,6 +6,7 @@ import json
 import bcrypt
 import pytest
 import mongomock
+from bson.objectid import ObjectId
 from api import app
 from src import auth, database
 from src.http import MediaType
@@ -13,7 +14,7 @@ from src.http import MediaType
 
 APPLICATION_JSON = MediaType.APPLICATION_JSON.value
 MOCK_EMAIL = "mock@test.com"
-
+MOCK_USER_ID = str(ObjectId())
 MOCK_PASSWORD = "mock-password"
 MOCK_HASHED_PASSWORD = bcrypt.hashpw(
     bytes(MOCK_PASSWORD, "utf-8"),
@@ -89,3 +90,14 @@ def mock_student():
     """
     with open("tests/mock/student.json", "r", encoding="utf-8") as mock_student_json:
         yield json.load(mock_student_json)
+
+
+@pytest.fixture
+def mock_flight():
+    """
+    Injects mock flight into tests
+    """
+    with open("tests/mock/flight.json", "r", encoding="utf-8") as mock_flight_json:
+        mock_flight = json.load(mock_flight_json)
+        mock_flight["student_id"] = MOCK_USER_ID
+        yield mock_flight

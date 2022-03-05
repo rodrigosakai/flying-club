@@ -9,7 +9,7 @@ from src import database
 
 def test_success(client, mock_instructor, mock_pilot, mock_student):
     """
-    For each user schema, test if:
+    For each user schema, tests if:
         1. record is inserted into database upon valid payload
         2. endpoint returns HTTP_CREATED
     """

@@ -43,9 +43,22 @@ def create_user():
     return {"user_id": created_id, "created_at": timestamp}, HTTP_CREATED
 
 
+@users_bp.route("/<string:user_id>/flights", methods=["GET"])
+@database.validate_student_id()
+def get_user_flights(user_id: str):
+    """
+    Retrieves student's flights
+    """
+    user_flights = database.get_documents(
+        "flights",
+        {"student_id": user_id})
+
+    return json_util.dumps(user_flights)
+
+
 @users_bp.route("/<string:user_id>", methods=["PUT"])
 @http.validate_request(MediaType.APPLICATION_JSON, schema=POST_SCHEMA)
-def update_user(user_id):
+def update_user(user_id: str):
     """
     Updates user data in database
     """

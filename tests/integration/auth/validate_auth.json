@@ -6,5 +6,15 @@
                 null
             ]
         }
+    ],
+    "post": [
+        {
+            "endpoint": "/flights",
+            "unauthorized_roles": [
+                null,
+                "student",
+                "pilot"
+            ]
+        }
     ]
 }
