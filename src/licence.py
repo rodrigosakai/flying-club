@@ -2,6 +2,8 @@
 Flying licence module
 """
 import os
+from random import sample
+from string import digits
 from src import database
 
 MINIMUM_FLYING_HOURS = os.getenv("MINIMUM_FLYING_HOURS")
@@ -46,10 +48,10 @@ def can_issue(student_id: str) -> bool:
 
 def issue() -> str:
     """
-    Issues a licence number.
+    Issues a 10-digit licence number.
 
     Returns:
     --------
     str: licence number
     """
-    return os.urandom(15).hex()
+    return "".join(sample(digits, 10))

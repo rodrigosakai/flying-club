@@ -15,6 +15,14 @@
                 "student",
                 "pilot"
             ]
+        },
+        {
+            "endpoint": "/users/mock_id/licence",
+            "unauthorized_roles": [
+                null,
+                "pilot",
+                "student"
+            ]
         }
     ]
 }

@@ -1,6 +1,7 @@
 """
 Tests setup
 """
+import os
 from unittest import mock
 import json
 import bcrypt
@@ -11,7 +12,7 @@ from api import app
 from src import auth, database
 from src.http import MediaType
 
-
+MINIMUM_FLYING_HOURS = int(os.getenv("MINIMUM_FLYING_HOURS"))
 APPLICATION_JSON = MediaType.APPLICATION_JSON.value
 MOCK_EMAIL = "mock@test.com"
 MOCK_USER_ID = str(ObjectId())
@@ -45,11 +46,11 @@ def mock_user():
     """
     Injects mock user into tests
     """
-    with open("tests/mock/user.json", "r", encoding="utf-8") as mock_user_json:
-        user = json.load(mock_user_json)
-        user["email"] = MOCK_EMAIL
-        user["password"] = MOCK_HASHED_PASSWORD
-        yield user
+    with open("tests/mock/user.json", "r", encoding="utf-8") as mock_user_file:
+        user_json = json.load(mock_user_file)
+        user_json["email"] = MOCK_EMAIL
+        user_json["password"] = MOCK_HASHED_PASSWORD
+        yield user_json
 
 
 @pytest.fixture
@@ -57,8 +58,8 @@ def instructor_headers():
     """
     Injects headers with instructor role to access protected routes
     """
-    with open("tests/mock/user.json", "r", encoding="utf-8") as mock_user_json:
-        user = json.load(mock_user_json)
+    with open("tests/mock/user.json", "r", encoding="utf-8") as mock_user_file:
+        user = json.load(mock_user_file)
         user["role"] = "instructor"
         token = auth.generate_jwt_token(user)
 
@@ -70,8 +71,8 @@ def mock_pilot():
     """
     Injects mock pilot into tests
     """
-    with open("tests/mock/pilot.json", "r", encoding="utf-8") as mock_pilot_json:
-        yield json.load(mock_pilot_json)
+    with open("tests/mock/pilot.json", "r", encoding="utf-8") as mock_pilot_file:
+        yield json.load(mock_pilot_file)
 
 
 @pytest.fixture
@@ -79,8 +80,8 @@ def mock_instructor():
     """
     Injects mock instructor into tests
     """
-    with open("tests/mock/instructor.json", "r", encoding="utf-8") as mock_instructor_json:
-        yield json.load(mock_instructor_json)
+    with open("tests/mock/instructor.json", "r", encoding="utf-8") as mock_instructor_file:
+        yield json.load(mock_instructor_file)
 
 
 @pytest.fixture
@@ -88,8 +89,8 @@ def mock_student():
     """
     Injects mock instructor into tests
     """
-    with open("tests/mock/student.json", "r", encoding="utf-8") as mock_student_json:
-        yield json.load(mock_student_json)
+    with open("tests/mock/student.json", "r", encoding="utf-8") as mock_student_file:
+        yield json.load(mock_student_file)
 
 
 @pytest.fixture
@@ -97,7 +98,7 @@ def mock_flight():
     """
     Injects mock flight into tests
     """
-    with open("tests/mock/flight.json", "r", encoding="utf-8") as mock_flight_json:
-        mock_flight = json.load(mock_flight_json)
-        mock_flight["student_id"] = MOCK_USER_ID
-        yield mock_flight
+    with open("tests/mock/flight.json", "r", encoding="utf-8") as mock_flight_file:
+        mock_flight_json = json.load(mock_flight_file)
+        mock_flight_json["student_id"] = MOCK_USER_ID
+        yield mock_flight_json

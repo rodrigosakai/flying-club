@@ -140,7 +140,7 @@ def validate_student_id():
                     {"_id": ObjectId(user_id)},
                     {"role": "student"}]})
 
-            if users == []:
+            if not users:
                 abort(HTTP_NOT_FOUND)
 
             return func(user_id, *args, **kwargs)

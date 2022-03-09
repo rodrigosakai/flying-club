@@ -2,11 +2,11 @@
 users Blueprint
 """
 import json
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 from bson import json_util
-from src import http, date, database, auth
+from src import http, database, auth, licence
 from src.auth import UserRole
-from src.http import HTTP_CREATED, MediaType
+from src.http import HTTP_BAD_REQUEST, HTTP_CREATED, MediaType
 
 users_bp = Blueprint("users_bp", __name__)
 
@@ -24,6 +24,8 @@ POST_SCHEMA = {"oneOf": [INSTRUCTOR_SCHEMA, PILOT_SCHEMA, STUDENT_SCHEMA]}
 @auth.validate_auth([UserRole.INSTRUCTOR, UserRole.PILOT, UserRole.STUDENT])
 def get_users():
     """
+    [GET] /users
+
     Returns documents from users collection
     """
     return json_util.dumps(database.get_documents("users"))
@@ -33,6 +35,8 @@ def get_users():
 @http.validate_request(MediaType.APPLICATION_JSON, schema=POST_SCHEMA)
 def create_user():
     """
+    [POST] /users
+
     Create user in users collection. A user is either:
         - A student
         - A pilot
@@ -47,7 +51,9 @@ def create_user():
 @database.validate_student_id()
 def get_user_flights(user_id: str):
     """
-    Retrieves student's flights
+    [GET] /users/<id>/flights
+
+    Retrieves student's flights records in database.
     """
     user_flights = database.get_documents(
         "flights",
@@ -60,9 +66,32 @@ def get_user_flights(user_id: str):
 @http.validate_request(MediaType.APPLICATION_JSON, schema=POST_SCHEMA)
 def update_user(user_id: str):
     """
+    [PUT] /users/<id>
+
     Updates user data in database
     """
-    timestamp = request.json["updated_at"] = date.get_current_timestamp()
     timestamp = database.update_document(user_id, "users", request.json)
 
     return {"updated_at": timestamp}
+
+
+@users_bp.route("/<string:user_id>/licence", methods=["POST"])
+@auth.validate_auth([UserRole.INSTRUCTOR])
+@database.validate_student_id()
+def issue_licence(user_id):
+    """
+    [POST] /users/<id>/licence
+
+    Converts student into pilot, if student has enough high grade flying hours
+    """
+    if not licence.can_issue(user_id):
+        abort(HTTP_BAD_REQUEST)
+
+    licence_number = licence.issue()
+
+    timestamp = database.update_document(
+        user_id,
+        "users",
+        {"role": UserRole.PILOT.value, "licence_number": licence_number})
+
+    return {"timestamp": timestamp}
