@@ -1,0 +1,26 @@
+image: python:3.7-slim-bullseye
+
+stages:
+  - lint
+  - test
+
+before_script:
+  - pip install --upgrade pip --user
+  - pip install pipenv
+  - pipenv install -d
+
+lint:
+  stage: lint
+  variables:
+    PYTHONPATH: "."
+  script:
+    - pipenv run pylint *.py src tests
+
+test:
+  stage: test
+  variables:
+    SECRET_KEY: "testing-key"
+    ENV: "testing"
+  script:
+    - echo 'testing'
+    - pipenv run pytest
