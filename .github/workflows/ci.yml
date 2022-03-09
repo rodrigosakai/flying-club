@@ -2,6 +2,10 @@ name: Pylint
 
 on: [push]
 
+env:
+  SECRET_KEY: not-so-secret-key
+  ENV: testing
+
 jobs:
   lint:
     runs-on: ubuntu-latest
