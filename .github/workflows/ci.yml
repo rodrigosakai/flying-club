@@ -5,6 +5,7 @@ on: [push]
 env:
   SECRET_KEY: not-so-secret-key
   ENV: testing
+  MINIMUM_FLYING_HOURS: 150
 
 jobs:
   lint:
