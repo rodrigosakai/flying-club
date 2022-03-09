@@ -4,7 +4,7 @@ users Blueprint
 import json
 from flask import Blueprint, request, abort
 from bson import json_util
-from src import http, database, auth, license
+from src import http, database, auth, flying_license
 from src.auth import UserRole
 from src.http import HTTP_BAD_REQUEST, HTTP_CREATED, MediaType
 
@@ -84,10 +84,10 @@ def issue_licence(user_id):
 
     Converts student into pilot, if student has enough high grade flying hours
     """
-    if not license.can_issue(user_id):
+    if not flying_license.can_issue(user_id):
         abort(HTTP_BAD_REQUEST)
 
-    licence_number = license.issue()
+    licence_number = flying_license.issue()
 
     timestamp = database.update_document(
         user_id,
